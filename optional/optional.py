@@ -1,9 +1,24 @@
+"""
+
+@todo: Change Optional() and deoption() to use NotPassed
+"""
+
 import abc
 import types
 import collections
 
 
 
+
+class NotPassed(object):
+    pass
+
+class NullType(object):
+    """Superclass of NoneType, NotPassed, and optional."""
+    __metaclass__ = abc.ABCMeta
+NullType.register(types.NoneType)
+NullType.register(NotPassed)
+#NullType.register(Optional)
 
 class Optional(object):
     """Simple implementation of an 'Optional' data type.
@@ -38,6 +53,7 @@ class Optional(object):
         return self.value
     def __repr__(self):
         return "Optional({0})".format(repr(self.value))
+NullType.register(Optional)
 
 def deoption(obj, default=None, execute=None):
     if isinstance(obj, Optional):
@@ -47,14 +63,20 @@ def deoption(obj, default=None, execute=None):
     else:
         return obj
 
-class Nullish(object):
-    """ABC for None-like objects.
-    If this turns out to be usefull...
-    @todo: Make this replicate the behavior of the builtin None.
-    """
-    __metaclass__ = abc.ABCMeta
-Nullish.register(types.NoneType)
-Nullish.register(Optional)
+
+
+
+
+
+
+# class Nullish(object):
+#     """ABC for None-like objects.
+#     If this turns out to be usefull...
+#     @todo: Make this replicate the behavior of the builtin None.
+#     """
+#     __metaclass__ = abc.ABCMeta
+# Nullish.register(types.NoneType)
+# Nullish.register(Optional)
 
 
 
@@ -80,3 +102,5 @@ if __name__ == "__main__":
     assert(myfunc('a', second=5) == expected)
     assert(myfunc('a', 5, 5) == expected)
     assert(myfunc('a', fourth=[]) == expected)
+    
+    print("all passed")
