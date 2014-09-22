@@ -1,26 +1,32 @@
 """
 
 @todo: Change Optional() and deoption() to use NotPassed
+@todo: Look at bugs/unit-testing dealing with user importing NullType from another source
+    --> getting NoneType to respect that?
 """
-
+from __future__ import absolute_import
 import abc
 import types
 import collections
+from .nulltype import NullType, NotPassed
+
+
+__all__ = ['Optional', 'deoption']
 
 
 
+# class NotPassed(object):
+#     pass
+# 
+# class NullType(object):
+#     """Superclass of NoneType, NotPassed, and optional."""
+#     __metaclass__ = abc.ABCMeta
+# NullType.register(types.NoneType)
+# NullType.register(NotPassed)
+# #NullType.register(Optional)
 
-class NotPassed(object):
-    pass
-
-class NullType(object):
-    """Superclass of NoneType, NotPassed, and optional."""
-    __metaclass__ = abc.ABCMeta
-NullType.register(types.NoneType)
-NullType.register(NotPassed)
-#NullType.register(Optional)
-
-class Optional(object):
+#class Optional(object):
+class Optional(NullType):
     """Simple implementation of an 'Optional' data type.
     @todo: Look at the implementations:
         Lingospot
@@ -53,7 +59,7 @@ class Optional(object):
         return self.value
     def __repr__(self):
         return "Optional({0})".format(repr(self.value))
-NullType.register(Optional)
+#NullType.register(Optional)
 
 def deoption(obj, default=None, execute=None):
     if isinstance(obj, Optional):
