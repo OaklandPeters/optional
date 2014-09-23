@@ -12,11 +12,13 @@ class TestNullType(unittest.TestCase):
     def test_supertype(self):
         self.assert_(isinstance(None, NullType))
         self.assert_(isinstance(Optional('a'), NullType))
+        self.assert_(isinstance(NotPassed, NotPassedType))
+        self.assert_(isinstance(NotPassed, NullType))
         
         self.assert_(issubclass(type(None), NullType))
         self.assert_(issubclass(types.NoneType, NullType))
         self.assert_(issubclass(Optional, NullType))
-        self.assert_(issubclass(NotPassed, NullType))
+        self.assert_(issubclass(NotPassedType, NullType))
 
 
 
