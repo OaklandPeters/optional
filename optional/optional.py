@@ -1,112 +1,84 @@
 """
 
+
+
 @todo: Change Optional() and deoption() to use NotPassed
 @todo: Look at bugs/unit-testing dealing with user importing NullType from another source
     --> getting NoneType to respect that?
-"""
-from __future__ import absolute_import
-import abc
-import types
-import collections
-from .nulltype import NullType, NotPassed
-
-
-__all__ = ['Optional', 'deoption']
-
-
-
-# class NotPassed(object):
-#     pass
-# 
-# class NullType(object):
-#     """Superclass of NoneType, NotPassed, and optional."""
-#     __metaclass__ = abc.ABCMeta
-# NullType.register(types.NoneType)
-# NullType.register(NotPassed)
-# #NullType.register(Optional)
-
-#class Optional(object):
-class Optional(NullType):
-    """Simple implementation of an 'Optional' data type.
-    @todo: Look at the implementations:
+@todo: Look at examples from:
         Lingospot
         fn.py
         Haskell
         Rust
+"""
+from __future__ import absolute_import
+import collections
+from .nulltype import NullType, NotPassed, NotPassedType, Optionable
+
+__all__ = ['Optional', 'deoption', 'DeoptionError']
+
+
+
+#class Optional(NullType):
+#class Optional(Optionable):
+class Optional(NotPassedType):
+    """Simple implementation of an 'Optional' data type.
+    An alternative to passing around 'None', in cases where 'None' might be
+    normally be passed in for that parameter. Closely related to 'NotPassed'.
     """
-    def __init__(self, default=None, execute=None):
+    def __init__(self, default=NotPassed, execute=NotPassed):
         self.default, self.execute = self._validate(default, execute)
 
-    def _validate(self, default=None, execute=None):
-        #execute must be None or callable
-        assert(isinstance(execute, (type(None), collections.Callable))), (
-            "'execute' must be NoneType or Callable."
-        )
+    def _validate(self, default=NotPassed, execute=NotPassed):
+        if not isinstance(execute, (NotPassedType, collections.Callable)):
+            raise TypeError("'execute' must be NotPassed or Callable.")
+        if isinstance(default, NotPassedType) and isinstance(execute, NotPassedType):
+            raise TypeError("At least one argument must be provided: "
+                "'execute' or 'default'.")
+        return default, execute
+
+    def deoption(self):
+        return deoption(None, self.default, self.execute)
         
-        if callable(execute):
-            assert(isinstance(default, type(None))), (
-                "If 'execute' is provided, then default must be not provided or None."
-            )
-        
-        return default, execute        
     @property
     def value(self):
-        if callable(self.execute):
-            return self.execute()
-        else:
-            return self.default
-    def get(self):
-        return self.value
+        return self.deoption()
+
     def __repr__(self):
-        return "Optional({0})".format(repr(self.value))
-#NullType.register(Optional)
+        return "Optional({0})".format(self._deoption_repr())
+    def _deoption_repr(self):
+        if not isinstance(self.execute, NotPassedType):
+            return repr(self.execute)
+        elif not isinstance(self.default, NotPassedType):
+            return repr(self.default)
+        else:
+            raise DeoptionError()
 
-def deoption(obj, default=None, execute=None):
-    if isinstance(obj, Optional):
-        return obj.value
-    elif isinstance(obj, type(None)):
-        return Optional(default=default, execute=execute).value
-    else:
+
+def deoption(obj, default=NotPassed, execute=NotPassed):
+    """Used as an 'default' function - to unwrap arguments.
+    def myfunction(first=None):
+        first = deoption(first, execute=dict)
+    """
+    # Dispatch: obj provides its own 'deoption' - use that
+    if isinstance(obj, Optionable):
+        return obj.deoption()
+    # obj is valid - return it
+    elif not isinstance(obj, NullType):
         return obj
+    # execute function was provided - call and return it
+    elif not isinstance(execute, NotPassedType):
+        # can error if a non-callable 'execute' is passed
+        return execute()
+    # default value was provided - return it
+    elif not isinstance(default, NotPassedType):
+        return default
+    # error state
+    else:
+        raise DeoptionError()
 
-
-
-
-
-
-
-# class Nullish(object):
-#     """ABC for None-like objects.
-#     If this turns out to be usefull...
-#     @todo: Make this replicate the behavior of the builtin None.
-#     """
-#     __metaclass__ = abc.ABCMeta
-# Nullish.register(types.NoneType)
-# Nullish.register(Optional)
-
-
-
-
-if __name__ == "__main__":
-    
-
-
-    def myfunc(first, second=None, third=Optional(5), fourth=Optional(execute=list)):
+class DeoptionError(TypeError):
+    _defaultmsg = "Cannot deoption: neither 'default' or 'execute' were provided."
+    def __init__(self, message=_defaultmsg):
+        super(DeoptionError, self).__init__(message)
         
-        #Equivalent: second = deoption(second, 5)
-        if isinstance(second, type(None)):
-            second = 5
-        
-        third = deoption(third)
-        fourth = deoption(fourth)
-        
-        return first, second, third, fourth
-
-    expected = ('a', 5, 5, [])
-    assert(myfunc('a') == expected)
-    assert(myfunc('a', 5) == expected)
-    assert(myfunc('a', second=5) == expected)
-    assert(myfunc('a', 5, 5) == expected)
-    assert(myfunc('a', fourth=[]) == expected)
-    
-    print("all passed")

@@ -2,10 +2,7 @@ from __future__ import absolute_import
 import unittest
 import types
 
-# if __name__ == "__main__":
-#     from optional import * #imports from package, not sub-module
-# else:
-#     from optional import *
+
 from optional import * #imports from package, not sub-module
 
 class TestNullType(unittest.TestCase):
@@ -38,7 +35,13 @@ class TestOptional(unittest.TestCase):
         self.expected = ('a', 5, 5, [])
         
         self.ident = lambda: None
-        
+
+    def _option_suite(self, value):
+        opt = Optional(value)
+        self.assert_(isinstance(opt, Optional))
+        self.assert_(isinstance(deoption(opt), type(value)))
+        self.assertEqual(deoption(opt), value)
+
     def test_optional(self):
         self._option_suite('a')
         self._option_suite(5)
@@ -57,11 +60,7 @@ class TestOptional(unittest.TestCase):
         self.assertEqual(deoption(opt, execute=dict), {})
         self.assertEqual(deoption(None, execute=dict), {})
 
-    def _option_suite(self, value):
-        opt = Optional(value)
-        self.assert_(isinstance(opt, Optional))
-        self.assert_(isinstance(deoption(opt), type(value)))
-        self.assertEqual(deoption(opt), value)
+
 
     def test_optional_arguments(self):
         self.assertEqual(self.myfunc('a'), self.expected)
@@ -73,6 +72,30 @@ class TestOptional(unittest.TestCase):
     def test_edges(self):
         self.assertEqual(self.myfunc('a', third=None), self.expected)
 
+    def test_exceptions(self):
+        self.assert_(issubclass(DeoptionError, TypeError))
+        self.assertRaises(TypeError,
+            lambda: Optional()
+        )
+        self.assertRaises(TypeError,
+            lambda: Optional(NotPassed, NotPassed)
+        )
+        
+        opt = Optional('a')
+        opt.default = NotPassed
+        self.assertRaises(DeoptionError,
+            lambda: opt.deoption()
+        )
+        
+        self.assertRaises(DeoptionError,
+            lambda: deoption(None)
+        )
+        self.assertRaises(DeoptionError,
+            lambda: deoption(None, NotPassed, NotPassed)
+        )
+        self.assertRaises(DeoptionError,
+            lambda: deoption(NotPassed)
+        )
 
 if __name__ == "__main__":
     unittest.main()
