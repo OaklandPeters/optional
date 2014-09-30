@@ -3,49 +3,48 @@ Optional
 
 Overview
 ---------
-Optional is a Python package inspired by Rust's `Option <http://doc.rust-lang.org/std/option/>`_ and Haskell's `Maybe <https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html/>`_.
+Optional is a ``Python`` package inspired by Rust's `Option <http://doc.rust-lang.org/std/option/>`_ and Haskell's `Maybe <https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html/>`_.
 It correctly distinguishes the different variation's of `None` that can be passed into a function. Specifically, `Optional` makes it easy to distinguish `No-value-was-passed` from the value `None` being passed.
 It also enhances specify default argument values, in a way that removes some `common error cases <http://docs.python-guide.org/en/latest/writing/gotchas//>`_.
 
 
 Examples
 --------
-`Optional` is used as the value of a optional argument, in cases where `None` is also a valid input for that argument (common in meta-programming related functions).
+`Optional` is primarily used as the default value of a optional argument, in cases where `None` is also a valid input for that argument. This is commonly encountered in meta-programming related functions. For example
 
 .. code:: python
 
-	from optional import Optional, deoption
+	from optional import Optional
 	
 	def attrgetter(obj, index, default=Optional()):
 		try:
 			return getattr(obj, index)
 		except AttributeError:
-			if isinstance(default, Optional
+			if isinstance(default, Optional)
 
-
-`Optional` also handles a common Python error stemming from mutable default arguments.
+`Optional` also handles a common Python error stemming from mutable default arguments, via ``deoption``.
 
 .. code::python
-	# Incorrect on repeated application
+
+	
 	def append(elm, target=[]):
 		target.append(elm)
 		return elm
 	
-	#Correct
+	
 	def append(elm, target=Optional(execute=list)):
+		target = deoption(target)
 		target.append(elm)
 		return elm
 
 Further, the `Optional` package also provides a base class `NullType` which is considered to be a parent class to `Optional`, `None`, and `NotPassed`.
 
-NullType
+.. code::python
 
-NotPassed
-NotPassedType
-
-Optional
-deoption
-
+	from optional import NullType
+	assert isinstance(None, NullType)
+	assert isinstance(Optional(), NullType)
+	assert isinstance(NotPassed, NullType)
 
 Installation
 -------------
