@@ -52,7 +52,7 @@ Further, the ``Optional`` package also provides a base class's to distinguish co
 Installation
 -------------
 
-.. code::python
+.. code:: python
 
 	pip install optional
 
