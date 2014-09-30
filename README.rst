@@ -1,48 +1,80 @@
-PACKAGE-NAME
-============
+Optional
+=============
+
+Overview
+---------
+Optional is a Python package inspired by Rust's `Option <http://doc.rust-lang.org/std/option/>`_ and Haskell's `Maybe <https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html/>`_.
+It correctly distinguishes the different variation's of `None` that can be passed into a function. Specifically, `Optional` makes it easy to distinguish `No-value-was-passed` from the value `None` being passed.
+It also enhances specify default argument values, in a way that removes some `common error cases <http://docs.python-guide.org/en/latest/writing/gotchas//>`_.
 
 
-Synopsis
+Examples
 --------
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
-
-Code Example
-------------
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+`Optional` is used as the value of a optional argument, in cases where `None` is also a valid input for that argument (common in meta-programming related functions).
 
 .. code:: python
 
-	import package
-	output = package.function("arguments")
-	print(output)
+	from optional import Optional, deoption
+	
+	def attrgetter(obj, index, default=Optional()):
+		try:
+			return getattr(obj, index)
+		except AttributeError:
+			if isinstance(default, Optional
 
-Motivation
------------
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+
+`Optional` also handles a common Python error stemming from mutable default arguments.
+
+.. code::python
+	# Incorrect on repeated application
+	def append(elm, target=[]):
+		target.append(elm)
+		return elm
+	
+	#Correct
+	def append(elm, target=Optional(execute=list)):
+		target.append(elm)
+		return elm
+
+Further, the `Optional` package also provides a base class `NullType` which is considered to be a parent class to `Optional`, `None`, and `NotPassed`.
+
+NullType
+
+NotPassed
+NotPassedType
+
+Optional
+deoption
+
 
 Installation
-------------
-Provide code examples and explanations of how to get the project.
-
-API Reference
 -------------
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
 
-Tests
------------
-Describe and show how to run the tests with code examples.
+.. code::python
 
-Contributors
-------------
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+	pip install optional
+
 
 License
 -----------
-A short snippet describing the license (MIT, Apache, etc.)
+The MIT License (MIT)
 
+Copyright (C) 2014, Oakland John Peters.
 
-Actual Attribution
---------------------
-This template was based on a `README.md <https://gist.github.com/jxson/1784669/>`_ by `Jason Campbell <https://gist.github.com/jxson/>`_ on Github.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-For more information on ReStructuredText (RST) formatting, see the `QuickRef <http://docutils.sourceforge.net/docs/user/rst/quickref.html/>`_ and the useful online RST editor/linter at http://rst.ninjs.org/.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
