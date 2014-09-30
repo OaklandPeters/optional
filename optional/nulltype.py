@@ -4,7 +4,7 @@ import collections
 
 
 
-__all__ = ['NullType', 'NotPassed', 'NotPassedType']
+__all__ = ['NullType', 'NotPassed', 'NotPassedType', 'Optionable']
 
 class NullType(object):
     """Superclass of NoneType, NotPassed, and optional."""
@@ -20,7 +20,8 @@ class NotPassedType(NullType):
 NotPassed = NotPassedType()
 
 class Optionable(NotPassedType):
-    """Abstract base class for Optional.
+    """Abstract base class for Option-like classes which define their
+    own deoption() method.
     """
     @abc.abstractmethod
     def deoption(self):

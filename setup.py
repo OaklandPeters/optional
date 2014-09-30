@@ -1,42 +1,25 @@
 from setuptools import setup
 
-# Filling in this template requires filling in:
-# name
-# description
-# packages
-# classifiers
-#    Development Status :: 
-# ... it would also be beneficial to study/fill in other classifiers 
-#
-# Also will benefit from confirming the url -- which may change frequently
-#    ... such as if not using bitbucket
-
-
-def TEMPLATE(placeholder='unspecified'):
-    """This function exists only to prevent you from running setup.py wihtout
-    filling in necessary parts. Delete TEMPLATE in the filled-in version."""
-    raise Exception("Template has not yet been filled in for: "+placeholder)
 
 setup(
-    name=TEMPLATE('{package-name}'),
+    name='optional',
     version=open('VERSION').read().strip(),
     author='Oakland John Peters',
     author_email='oakland.peters@gmail.com',
-
-    description=TEMPLATE('{long-description'),
+    description=(
+        "A simple implementation of an 'Optional' data type. "
+        "Optional is an alternative to passing around 'None', in cases where "
+        "'None' might be normally be passed in for that parameter. "
+        "Heavily inspired by Rust's 'Option'  and Haskell's 'Maybe' types."
+    ),
     long_description=open('README.rst').read(),
-    url=TEMPLATE('package: http://bitbucket.org/OPeters/{package-name}'),
+    url='http://bitbucket.org/OPeters/optional/',
     license='MIT',
-
-    packages=[TEMPLATE('{package-name}')],
+    packages=['optional'],
 
     classifiers=[
-        #Select one 'Development Status'
-        #'Development Status :: 1 - Planning',
-        #'Development Status :: 2 - Pre-Alpha',
-        #'Development Status :: 3 - Alpha',
-        #'Development Status :: 4 - Beta',
         #'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
@@ -47,6 +30,6 @@ setup(
 
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Intended Audience :: Developers',
-        'Topic :: Utilities' #only if appropriate
+        'Topic :: Utilities'
     ]
 )
