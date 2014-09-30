@@ -2,8 +2,11 @@ from __future__ import absolute_import
 import unittest
 import types
 
-
-from optional import * #imports from package, not sub-module
+if __name__ == "__main__":
+    from optional import * #imports from package, not sub-module
+else:
+    from .optional import *
+    from .nulltype import *
 
 class TestNullType(unittest.TestCase):
     def test_supertype(self):

@@ -56,6 +56,13 @@ Installation
 
 	pip install optional
 
+Testing
+--------
+To run the unit-tests:
+
+.. code:: python
+
+	python test.py
 
 License
 -----------
