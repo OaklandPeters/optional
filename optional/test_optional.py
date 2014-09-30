@@ -22,7 +22,6 @@ class TestNullType(unittest.TestCase):
 class TestOptional(unittest.TestCase):
     def setUp(self):
         def myfunc(first, second=None, third=Optional(5), fourth=Optional(execute=list)):
-            
             #Equivalent: second = deoption(second, 5)
             if isinstance(second, type(None)):
                 second = 5

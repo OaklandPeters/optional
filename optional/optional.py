@@ -1,15 +1,6 @@
 """
 
 
-
-@todo: Change Optional() and deoption() to use NotPassed
-@todo: Look at bugs/unit-testing dealing with user importing NullType from another source
-    --> getting NoneType to respect that?
-@todo: Look at examples from:
-        Lingospot
-        fn.py
-        Haskell
-        Rust
 """
 from __future__ import absolute_import
 import collections
@@ -64,7 +55,7 @@ def deoption(obj, default=NotPassed, execute=NotPassed):
     if isinstance(obj, Optionable):
         return obj.deoption()
     # obj is valid - return it
-    elif not isinstance(obj, NullType):
+    elif not isinstance(obj, NotPassedType):
         return obj
     # execute function was provided - call and return it
     elif not isinstance(execute, NotPassedType):
