@@ -3,8 +3,8 @@ Optional
 
 Overview
 ---------
-Optional is a ``Python`` package inspired by Rust's `Option <http://doc.rust-lang.org/std/option/>`_ and Haskell's `Maybe <https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html/>`_.
-It correctly distinguishes the different variation's of `None` that can be passed into a function. Specifically, `Optional` makes it easy to distinguish `No-value-was-passed` from the value `None` being passed.
+Optional is a Python package inspired by `Rust's <http://doc.rust-lang.org/std/option/>`_ ``Option``  and `Haskell's <https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html/>`_ ``Maybe``.
+It correctly distinguishes the different variation's of ``None`` that can be passed into a function. Specifically, ``Optional`` makes it easy to distinguish ``No-value-was-passed`` (called ``NotPassed`` in this package) from the value ``None`` being passed.
 It also enhances specify default argument values, in a way that removes some `common error cases <http://docs.python-guide.org/en/latest/writing/gotchas//>`_.
 
 
@@ -25,13 +25,11 @@ Examples
 `Optional` also handles a common Python error stemming from mutable default arguments, via ``deoption``.
 
 .. code::python
-
 	
 	def append(elm, target=[]):
 		target.append(elm)
 		return elm
-	
-	
+
 	def append(elm, target=Optional(execute=list)):
 		target = deoption(target)
 		target.append(elm)
