@@ -20,7 +20,8 @@ Examples
 		try:
 			return getattr(obj, index)
 		except AttributeError:
-			if isinstance(default, Optional)
+			if not isinstance(default, Optional):
+				return default
 
 ``Optional`` also handles a common Python error stemming from mutable default arguments, via the ``deoption`` function:
 
