@@ -27,10 +27,12 @@ Examples
 
 .. code:: python
 	
+	# Common error - repeated invocations will yield a growing 'target'
 	def append(elm, target=[]):
 		target.append(elm)
 		return elm
 
+	# Works properly - each invocation sees target == []
 	def append(elm, target=Optional(execute=list)):
 		target = deoption(target)
 		target.append(elm)
